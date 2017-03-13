@@ -14,6 +14,7 @@
 		2B13894B1E7652FA00763F1C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2B13894A1E7652FA00763F1C /* Assets.xcassets */; };
 		2B13894E1E7652FA00763F1C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2B13894C1E7652FA00763F1C /* LaunchScreen.storyboard */; };
 		2B1389581E7653E700763F1C /* VideoCapture.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B1389571E7653E700763F1C /* VideoCapture.m */; };
+		2B13895B1E765EAA00763F1C /* H264Encoder.m in Sources */ = {isa = PBXBuildFile; fileRef = 2B13895A1E765EAA00763F1C /* H264Encoder.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,6 +30,8 @@
 		2B13894F1E7652FA00763F1C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2B1389561E7653E700763F1C /* VideoCapture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoCapture.h; sourceTree = "<group>"; };
 		2B1389571E7653E700763F1C /* VideoCapture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = VideoCapture.m; sourceTree = "<group>"; };
+		2B1389591E765EAA00763F1C /* H264Encoder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = H264Encoder.h; sourceTree = "<group>"; };
+		2B13895A1E765EAA00763F1C /* H264Encoder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = H264Encoder.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +91,8 @@
 			children = (
 				2B1389561E7653E700763F1C /* VideoCapture.h */,
 				2B1389571E7653E700763F1C /* VideoCapture.m */,
+				2B1389591E765EAA00763F1C /* H264Encoder.h */,
+				2B13895A1E765EAA00763F1C /* H264Encoder.m */,
 			);
 			path = ZFEncoder;
 			sourceTree = "<group>";
@@ -168,6 +173,7 @@
 				2B1389461E7652FA00763F1C /* ViewController.m in Sources */,
 				2B1389431E7652FA00763F1C /* AppDelegate.m in Sources */,
 				2B1389401E7652FA00763F1C /* main.m in Sources */,
+				2B13895B1E765EAA00763F1C /* H264Encoder.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -8,15 +8,22 @@
 
 #import "VideoCapture.h"
 #import <AVFoundation/AVFoundation.h>
+#import "H264Encoder.h"
 
 @interface VideoCapture () <AVCaptureVideoDataOutputSampleBufferDelegate>
 @property (nonatomic, weak) AVCaptureSession *session;
 @property (nonatomic, weak) AVCaptureVideoPreviewLayer *preViewLayer;
+@property (nonatomic, strong) H264Encoder *encoder;
 @end
 
 @implementation VideoCapture
 
 - (void)startCapturing:(UIView *)preView {
+    // ------------------------------ 准备编码 ------------------------------
+    self.encoder = [[H264Encoder alloc] init];
+    [self.encoder prepareEncodeWithWidth:720 height:1280];
+    
+    // ------------------------------ 采集视频 ------------------------------
     // 1. 创建session
     AVCaptureSession *session = [[AVCaptureSession alloc] init];
     session.sessionPreset = AVCaptureSessionPreset1280x720;
@@ -65,7 +72,7 @@
 
 // 开始输出
 - (void)captureOutput:(AVCaptureOutput *)captureOutput didOutputSampleBuffer:(CMSampleBufferRef)sampleBuffer fromConnection:(AVCaptureConnection *)connection {
-    NSLog(@"采集到视频画面");
+    [self.encoder encodeFrame:sampleBuffer];
 }
 
 @end
