@@ -12,11 +12,17 @@
 @interface H264Encoder ()
 @property (nonatomic, assign) VTCompressionSessionRef compressionSession;
 @property (nonatomic, assign) int frameIndex;
+@property (nonatomic, strong) NSFileHandle *fileHandle;
 @end
 
 @implementation H264Encoder
 
 - (void)prepareEncodeWithWidth:(int)width height:(int)height {
+    // -1. 创建写入文件的对象
+    NSString *filePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, true) firstObject] stringByAppendingPathComponent:@"123.h264"];
+    [[NSFileManager defaultManager] createFileAtPath:filePath contents:nil attributes:nil];
+    self.fileHandle = [NSFileHandle fileHandleForWritingAtPath:filePath];
+    
     // 0. 设置默认为第0帧
     self.frameIndex = 0;
     
@@ -71,7 +77,9 @@ void didCompressionCallBack (void * CM_NULLABLE outputCallbackRefCon,
                              OSStatus status,
                              VTEncodeInfoFlags infoFlags,
                              CM_NULLABLE CMSampleBufferRef sampleBuffer ) {
-    //    NSLog(@"编码出一帧图像");
+    // 0. 获取当前对象
+    H264Encoder *encoder = (__bridge H264Encoder *)(outputCallbackRefCon);
+    
     // 1. 判断该帧是否是关键帧
     CFArrayRef attachments = CMSampleBufferGetSampleAttachmentsArray(sampleBuffer, true);
     CFDictionaryRef dict = CFArrayGetValueAtIndex(attachments, 0);
@@ -96,8 +104,9 @@ void didCompressionCallBack (void * CM_NULLABLE outputCallbackRefCon,
         NSData *spsData = [NSData dataWithBytes:spsOut length:spsSize];
         NSData *ppsData = [NSData dataWithBytes:ppsOut length:ppsSize];
         
-        // 2.5 写入文件
-        
+        // 2.5 写入文件(NALU单元: 0x00 00 00 01)
+        [encoder writeData:spsData];
+        [encoder writeData:ppsData];
     }
     
     // 3. 获取编码后的数据,写入文件
@@ -125,10 +134,30 @@ void didCompressionCallBack (void * CM_NULLABLE outputCallbackRefCon,
         NSData *data = [NSData dataWithBytes:dataPointer + bufferOffset + H264HeaderLength length:NALULength];
         
         // 3.6 写入文件
+        [encoder writeData:data];
         
         // 3.7 重新设置bufferOffset
         bufferOffset += NALULength + H264HeaderLength;
     }
 }
 
+
+- (void)writeData:(NSData *)data {
+    NSLog(@"-------");
+    
+    // 1. 获取startCode
+    const char bytes[] = "\x00\x00\x00\x01";
+    
+    // 2. 获取headerData
+    NSData *headerData = [NSData dataWithBytes:bytes length:sizeof(bytes) - 1];
+    
+    // 3. 写入文件
+    [self.fileHandle writeData:headerData];
+    [self.fileHandle writeData:data];
+}
+
+- (void)endEncode {
+    VTCompressionSessionInvalidate(self.compressionSession);
+    CFRelease(self.compressionSession);
+}
 @end

@@ -14,4 +14,6 @@
 - (void)prepareEncodeWithWidth:(int)width height:(int)height;
 - (void)encodeFrame:(CMSampleBufferRef)sampleBuffer;
 
+
+- (void)endEncode;
 @end
